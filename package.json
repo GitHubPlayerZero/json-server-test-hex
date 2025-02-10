@@ -1,7 +1,7 @@
 {
-  "name": "json-server-vercel",
+  "name": "json-server-render",
   "version": "1.0.0",
-  "description": "Deploy JSON Server to Vercel",
+  "description": "Deploy JSON Server to Render",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
