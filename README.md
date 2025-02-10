@@ -1,3 +1,12 @@
+## JSON Server with Render
+- [專案拷貝來源](https://github.com/gonsakon/json-server-vercel)
+
+此專案因改為使用 Render 部署，故將 Vercel 相關設定移除。<br>
+以下為原專案說明。
+<br>
+---
+<br>
+
 ## Deploy JSON Server to Vercel
 
 A template to deploy [JSON Server](https://github.com/typicode/json-server) to [Vercel](https://vercel.com), allow you to run fake REST API online!
