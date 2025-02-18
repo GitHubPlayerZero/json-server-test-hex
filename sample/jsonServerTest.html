@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Server Test</title>
+  <!-- <link rel="stylesheet" href="../../css/common.css"> -->
+
+  <style>
+    body {
+      padding: 15px 15px 50px;
+      background-color: #eee;
+      font-size: 18px;
+    }
+
+    hr {
+      margin: 30px 0;
+    }
+
+    input,
+    button,
+    select {
+      font-size: 16px;
+    }
+
+    input[type=button],
+    input[type=submit],
+    button {
+      padding: 4px 12px;
+      box-shadow: 3px 3px 3px #666;
+    }
+
+    .flex-btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      -moz-column-gap: 16px;
+      column-gap: 16px;
+      row-gap: 20px;
+      padding: 10px 10px 15px;
+    }
+
+    .flex-btn-group.column {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .flex-btn-group.border {
+      border: 2px dotted #990;
+    }
+
+    .border {
+      border: 3px dashed orange;
+      padding: 0 15px 10px;
+    }
+
+    .border-sub {
+      border: 2px dashed blue;
+      padding: 0 15px 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>JSON Server Test</h1>
+
+  <h2>新增（POST）</h2>
+
+  <div class="flex-btn-group">
+    <button type="button" onclick="addPost();">新增一筆 post</button>
+  </div>
+
+  <hr />
+
+  <h2>修改（PUT、PATCH）</h2>
+
+  <section style="margin-bottom: 32px;">
+    <h3>PUT</h3>
+    <p>會替換整筆資料內容，沒有設定資料的欄位就會不見。</p>
+
+    <div class="flex-btn-group">
+      <button type="button" onclick="putPost1Title();">使用 put 修改 post 1 的 title</button>
+      <button type="button" onclick="putPost1Author();">使用 put 修改 post 1 的 author</button>
+      <button type="button" onclick="putPost1All();">使用 put 修改 post 1 的所有資料</button>
+    </div>
+  </section>
+
+  <section>
+    <h3>PATCH</h3>
+    <p>只會修改有設定資料的欄位。</p>
+
+    <div class="flex-btn-group">
+      <button type="button" onclick="patchPost1Title();">使用 patch 修改 post 1 的 title</button>
+      <button type="button" onclick="patchPost1Author();">使用 patch 修改 post 1 的 author</button>
+      <button type="button" onclick="patchPost1All();">使用 patch 修改 post 1 的所有資料</button>
+    </div>
+  </section>
+
+  <hr />
+
+  <h2>DELETE（刪除）</h2>
+
+  <div>
+    <label>
+      ID：<input type="number" id="deleteId" value="1" style="width: 60px; padding: 5px;">
+    </label>
+    &nbsp;&nbsp;&nbsp;
+    <button type="button" onclick="deleteData('posts');">刪除 post</button>
+  </div>
+
+  <hr />
+
+  <h2>查詢（GET）</h2>
+
+  <section class="border">
+    <h3>取得資源所有資料</h3>
+    <div class="flex-btn-group">
+      <button type="button" onclick="getDatas('posts')">posts</button>
+      <button type="button" onclick="getDatas('comments')">comments</button>
+      <button type="button" onclick="getDatas('profile')">profile</button>
+      <button type="button" onclick="getDatas('families')">families</button>
+      <button type="button" onclick="getDatas('familyParents')">familyParents</button>
+      <button type="button" onclick="getDatas('familyChildren')">familyChildren</button>
+    </div>
+  </section>
+
+  <br />
+
+  <section class="border">
+    <h3>以 ID 取得資料</h3>
+    <div>
+      <label style="display: block; margin-bottom: 12px;">
+        ID：<input type="number" id="queryId" value="1" style="width: 60px; padding: 5px;">
+      </label>
+
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDataById('posts')">posts</button>
+        <button type="button" onclick="getDataById('comments')">comments</button>
+        <button type="button" onclick="getDataById('families')">families</button>
+        <button type="button" onclick="getDataById('familyParents')">familyParents</button>
+        <button type="button" onclick="getDataById('familyChildren')">familyChildren</button>
+      </div>
+    </div>
+  </section>
+
+  <br />
+
+  <section class="border">
+    <h3>條件</h3>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">單一條件，大小寫敏感。</p>
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?author=typicode')">posts?author=typicode</button>
+        <button type="button" onclick="getDatas('posts?author=patchAuthor2')">posts?author=patchAuthor2</button>
+        <button type="button" onclick="getDatas('posts?author=patchauthor2')">posts?author=patchauthor2</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">當不給予屬性條件值時，會取得屬性內容為「<span style="font-weight: bold;">空字串</span>」的資料。</p>
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?author=')">posts?author=</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">多個條件。</p>
+      <div class="flex-btn-group">
+        <button type="button"
+          onclick="getDatas('posts?author=typicode&title=xxx')">posts?author=typicode&title=xxx</button>
+        <button type="button" onclick="getDatas('posts?author=typicode&id=1')">posts?author=typicode&id=1</button>
+        <button type="button" onclick="getDatas('posts?author=patchAuthor2&id=3')">
+          posts?author=patchAuthor2&id=3
+        </button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">當多個條件均為相同屬性時，為聯集效果，相當於 SQL 的 <code>IN</code>。</p>
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?author=patchAuthor2&author=typicode')">
+          posts?author=patchAuthor2&author=typicode
+        </button>
+        <button type="button" onclick="getDatas('posts?id=1&id=2')">posts?id=1&id=2</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">深度屬性條件。</p>
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('families?location.city=台中市')">families?location.city=台中市</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">
+        <code>_like</code>，相當於 SQL 的「<code>like '%xxx%'</code>」做法，大小寫不敏感。
+      </p>
+
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?title_like=cc')">posts?title_like=cc</button>
+        <button type="button" onclick="getDatas('posts?author_like=Author2')">posts?author_like=Author2</button>
+        <button type="button" onclick="getDatas('posts?author_like=author')">posts?author_like=author</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">
+        當 <code>_like</code> 不下條件值時，可以取得屬性內容為任何值的資料（<span style="font-weight: bold;">包括空字串</span>），但不會取得<span
+          style="font-weight: bold;">未定義此屬性</span>的資料。<br>
+      </p>
+
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?author_like')">posts?author_like</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">
+        <code>_ne</code>，相當於 SQL 的 <code>&lt;></code>（不等於），大小寫敏感。<br>
+        要注意的是，若資料<span style="font-weight: bold;">未定義條件所指定的屬性</span>，也會被排除。
+      </p>
+
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?id_ne=1')">posts?id_ne=1</button>
+        <button type="button" onclick="getDatas('posts?author_ne=patchAuthor2')">posts?author_ne=patchAuthor2</button>
+        <button type="button" onclick="getDatas('posts?author_ne=patchauthor2')">posts?author_ne=patchauthor2</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">
+        當 <code>_ne</code> 不下條件值時，會取得所有資料，但會排除屬性內容為「<span style="font-weight: bold;">空字串</span>」與「<span
+          style="font-weight: bold;">未定義此屬性</span>」的資料。
+      </p>
+
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?author_ne')">posts?author_ne</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <ul style="margin-bottom: 8px;">
+        <li><code>_gte</code>：大於等於（<code>>=</code>）</li>
+        <li><code>_lte</code>：小於等於（<code>&lt=</code>）</li>
+      </ul>
+
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('familyParents?age_gte=69')">familyParents?age_gte=69</button>
+        <button type="button" onclick="getDatas('familyParents?age_lte=70')">familyParents?age_lte=70</button>
+        <button type="button"
+          onclick="getDatas('familyParents?age_gte=69&age_lte=77')">familyParents?age_gte=69&age_lte=77</button>
+      </div>
+    </div>
+  </section>
+
+  <br>
+
+  <section class="border">
+    <h3>排序</h3>
+    <p>
+      <span style="font-weight: bold;">注意！</span>
+      以日期字串做排序時要注意，其會以字串的方式比對而非日期，因此 <code>1</code> 會被視為比 <code>02</code>
+      來得大，而 <code>2</code> 又會被視為比 <code>11</code> 大。<br>
+      因此若有儲存日期資料，內容格式最好統一補 0，例如 <code>2025/2/1</code> 要寫作 <code>2025/02/01</code>。
+    </p>
+
+    <p style="margin-bottom: 8px;">排序方式：</p>
+    <ul style="margin-bottom: 32px; margin-top: 0;">
+      <li>升序：asc。（預設）</li>
+      <li>降序：desc。</li>
+    </ul>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">單一屬性排序。</p>
+
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?_sort=date')">posts?_sort=date</button>
+        <button type="button" onclick="getDatas('posts?_sort=date&_order=desc')">posts?_sort=date&_order=desc</button>
+      </div>
+
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('familyParents?_sort=age')">familyParents?_sort=age</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">多屬性排序。</p>
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?_sort=date,title')">posts?_sort=date,title</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">
+        排序方式與屬性為一對一的對應，若屬性數量多於排序方式數量，後面沒對應到的屬性就會以預設方式（升序）排序。
+      </p>
+
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?_sort=date,title&_order=desc')">
+          posts?_sort=date,title&_order=desc
+        </button>
+        <button type="button" onclick="getDatas('posts?_sort=date,title&_order=desc,desc')">
+          posts?_sort=date,title&_order=desc,desc
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <br>
+
+  <section class="border">
+    <h3>分頁</h3>
+
+    <ul style="margin-bottom: 32px;">
+      <li><code>_page</code>：第幾頁，由 1 開始。</li>
+      <li><code>_limit</code>：一頁幾筆，非必要，預設為 10 筆。</li>
+      <li>
+        回傳的資料中，<code>headers</code> 裡有 <code>link</code> 資訊，記錄 first、prev、next、last 的連結（視情況連結資訊會有增減）。
+      </li>
+    </ul>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">沒有指定每頁筆數。</p>
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?_page=1')">posts?_page=1</button>
+        <button type="button" onclick="getDatas('posts?_page=2')">posts?_page=2</button>
+        <button type="button" onclick="getDatas('posts?_page=3')">posts?_page=3</button>
+      </div>
+    </div>
+
+    <div>
+      <p style="margin-bottom: 4px;">指定每頁筆數。</p>
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?_page=1&_limit=2')">posts?_page=1&_limit=2</button>
+        <button type="button" onclick="getDatas('posts?_page=2&_limit=2')">posts?_page=2&_limit=2</button>
+        <button type="button" onclick="getDatas('posts?_page=1&_limit=20')">posts?_page=1&_limit=20</button>
+      </div>
+    </div>
+  </section>
+
+  <br>
+
+  <section class="border">
+    <h3>Slice（裁切）</h3>
+    <p>以 ID 作為裁切條件。</p>
+
+    <ul style="margin-bottom: 32px;">
+      <li>
+        <code>_start</code>：起始 ID，不包含本身，必須與 <code>_end</code> 或 <code>_limit</code> 搭配，只有 <code>_start</code> 會沒有任何效果。
+      </li>
+      <li><code>_end</code>：結束 ID，包含本身。</li>
+      <li><code>_limit</code>：筆數。</li>
+    </ul>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">只有 <code>_start</code>，會撈回全部的資料。</p>
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?_start=5')">posts?_start=5</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;"><code>_start</code> 與 <code>_end</code> 搭配。</p>
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?_start=5&_end=5')">posts?_start=5&_end=5</button>
+        <button type="button" onclick="getDatas('posts?_start=5&_end=6')">posts?_start=5&_end=6</button>
+        <button type="button" onclick="getDatas('posts?_start=5&_end=7')">posts?_start=5&_end=7</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;"><code>_end</code> 超出範圍。</p>
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?_start=9&_end=14')">posts?_start=9&_end=14</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;"><code>_start</code> 與 <code>_limit</code> 搭配。</p>
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?_start=5&_limit=4')">posts?_start=5&_limit=4</button>
+        <button type="button" onclick="getDatas('posts?_start=5&_limit=6')">posts?_start=5&_limit=6</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;"><code>_limit</code> 超出範圍。</p>
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?_start=10&_limit=4')">posts?_start=10&_limit=4</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">
+        測試 <code>_end</code> 與 <code>_limit</code> 合用。<br>
+        結果：無論參數如何排列、無論參數值的大小，都會<span style="font-weight: bold;">以 <code>_end</code> 的設定為主</span>。
+      </p>
+
+      <div class="flex-btn-group">
+        <button type="button"
+          onclick="getDatas('posts?_start=5&_end=9&_limit=2')">posts?_start=5&_end=9&_limit=2</button>
+        <button type="button"
+          onclick="getDatas('posts?_start=5&_end=7&_limit=4')">posts?_start=5&_end=7&_limit=4</button>
+        <button type="button"
+          onclick="getDatas('posts?_start=5&_limit=2&_end=9')">posts?_start=5&_limit=2&_end=9</button>
+        <button type="button"
+          onclick="getDatas('posts?_start=5&_limit=4&_end=7')">posts?_start=5&_limit=4&_end=7</button>
+      </div>
+    </div>
+
+  </section>
+
+  <br>
+
+  <section class="border">
+    <h3>全文搜索</h3>
+
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">以參數 <code>q</code> 作為全文搜索，會比對所有屬性。</p>
+
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?q=patchAuthor2')">posts?q=patchAuthor2</button>
+        <button type="button" onclick="getDatas('posts?q=json-server-eee')">posts?q=json-server-eee</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">大小寫不敏感。</p>
+
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?q=patchauthor2')">posts?q=patchauthor2</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <p style="margin-bottom: 4px;">只允許一個 <code>q</code> 條件，若有多個只會以第一個為主。</p>
+
+      <div class="flex-btn-group">
+        <button type="button" onclick="getDatas('posts?q=patchAuthor2&q=json-server-eee')">
+          posts?q=patchAuthor2&q=json-server-eee
+        </button>
+        <button type="button" onclick="getDatas('posts?q=json-server-eee&q=patchAuthor2')">
+          posts?q=json-server-eee&q=patchAuthor2
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <br>
+
+  <!-- Relationships -->
+  <article class="border">
+    <h3>Relationships</h3>
+    <p>類似於 SQL 的 JOIN，<span style="font-weight: bold;">關聯的 ID 會放在子資源中</span>。</p>
+
+    <section class="border-sub" style="margin-bottom: 28px;">
+      <h4>_embed：父資源結合子資源，類似於 SQL 的一對多 outer join 關係。</h4>
+
+      <ul style="margin-bottom: 32px;">
+        <li>以父資源為主軸產出結果。</li>
+        <li>父資源會建立一個陣列屬性，以子資源名稱（複數）作為屬性鍵項，並將關聯到的子資料放入陣列中。</li>
+        <li>對應不到子資料的父資料仍會有一個空陣列。</li>
+      </ul>
+
+      <div>
+        <p style="margin-bottom: 4px;">可以整個資源做關聯。</p>
+
+        <div class="flex-btn-group">
+          <button type="button" onclick="getDatas('posts?_embed=comments')">
+            posts?_embed=comments
+          </button>
+        </div>
+
+        <div class="flex-btn-group">
+          <button type="button" onclick="getDatas('families?_embed=familyParents')">
+            families?_embed=familyParents
+          </button>
+          <button type="button" onclick="getDatas('familyParents?_embed=peoples')">
+            familyParents?_embed=peoples
+          </button>
+        </div>
+
+        <div class="flex-btn-group">
+          <button type="button" onclick="getDatas('lifeDeathCodes?_embed=familyChildren')">
+            lifeDeathCodes?_embed=familyChildren
+          </button>
+        </div>
+
+        <p style="margin-bottom: 4px;">也可以指定某筆資料做關聯。</p>
+
+        <div class="flex-btn-group">
+          <button type="button" onclick="getDatas('posts/1?_embed=comments')">posts/1?_embed=comments</button>
+          <button type="button" onclick="getDatas('families/1?_embed=familyParents')">
+            families/1?_embed=familyParents
+          </button>
+        </div>
+
+        <p style="margin-bottom: 4px;">可以關聯多個資源。</p>
+
+        <div class="flex-btn-group">
+          <button type="button" onclick="getDatas('families?_embed=familyParents&_embed=familyChildren')">
+            families?_embed=familyParents&_embed=familyChildren
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="border-sub" style="margin-bottom: 28px;">
+      <h4>_expand：子資源結合父資源，類似於 SQL 的一對一 outer join 關係。</h4>
+
+      <ul style="margin-bottom: 32px;">
+        <li>以子資源為主軸產出結果。</li>
+        <li>子資源會建立一個物件屬性，以父資源單數名稱作為屬性鍵項，並將關聯到的父資料放入物件中。</li>
+        <li>對應不到父資料的子資料不會有此屬性。</li>
+      </ul>
+
+      <div>
+        <p style="margin-bottom: 4px;">可以整個資源做關聯。</p>
+
+        <div class="flex-btn-group">
+          <button type="button" onclick="getDatas('comments?_expand=post')">comments?_expand=post</button>
+        </div>
+
+        <div class="flex-btn-group">
+          <button type="button"
+            onclick="getDatas('familyChildren?_expand=family')">familyChildren?_expand=family</button>
+          <button type="button" onclick="getDatas('familyChildren?_expand=lifeDeathCode')">
+            familyChildren?_expand=lifeDeathCode
+          </button>
+        </div>
+
+        <div class="flex-btn-group">
+          <button type="button" onclick="getDatas('peoples?_expand=lifeDeathCode')">
+            peoples?_expand=lifeDeathCode
+          </button>
+          <button type="button" onclick="getDatas('peoples?_expand=familyParent')">
+            peoples?_expand=familyParent
+          </button>
+          <button type="button" onclick="getDatas('peoples?_expand=familyChild')">
+            peoples?_expand=familyChild
+          </button>
+          <!-- <button type="button" onclick="getDatas('families?father_expand=lifeDeathCode')">families?father_expand=lifeDeathCode</button> -->
+        </div>
+
+        <p style="margin-bottom: 4px;">也可以指定某筆資料做關聯。</p>
+
+        <div class="flex-btn-group">
+          <button type="button" onclick="getDatas('comments/1?_expand=post')">comments/1?_expand=post</button>
+          <button type="button" onclick="getDatas('familyChildren/1?_expand=family')">
+            familyChildren/1?_expand=family
+          </button>
+        </div>
+
+        <p style="margin-bottom: 4px;">可以關聯多個資源。</p>
+
+        <div class="flex-btn-group">
+          <button type="button"
+            onclick="getDatas('peoples?_expand=familyChild&_expand=familyParent&_expand=lifeDeathCode')">
+            peoples?_expand=familyChild&_expand=familyParent&_expand=lifeDeathCode
+          </button>
+        </div>
+
+        <p style="margin-bottom: 4px;">_expand 與 _embed 合用</p>
+
+        <div class="flex-btn-group">
+          <button type="button" onclick="getDatas('familyChildren?_expand=family&_embed=peoples')">
+            familyChildren?_expand=family&_embed=peoples
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="border-sub">
+      <h4>嵌套資源</h4>
+      <ul style="margin-bottom: 24px;">
+        <li>
+          此作法似乎僅適用於<span style="font-weight: bold;">父資源關聯子資源</span>，子資源關聯父資源只會撈回父資源所有資料，沒有篩選效果。
+        </li>
+        <li>父資源無法整個資源做關聯，必須指定某一筆 ID。</li>
+        <li>回傳結果只會放子資源的資料。</li>
+      </ul>
+
+      <div style="margin-bottom: 18px;">
+        <p style="margin-bottom: 4px;">父資源結合子資源。</p>
+
+        <div class="flex-btn-group">
+          <button type="button" onclick="getDatas('posts/1/comments')">posts/1/comments</button>
+          <button type="button" onclick="getDatas('posts/2/comments')">posts/2/comments</button>
+          <button type="button" onclick="getDatas('posts/3/comments')">posts/3/comments</button>
+        </div>
+
+        <div class="flex-btn-group">
+          <button type="button" onclick="getDatas('families/1/familyParents')">families/1/familyParents</button>
+          <button type="button" onclick="getDatas('families/2/familyParents')">families/2/familyParents</button>
+          <button type="button" onclick="getDatas('families/3/familyParents')">families/3/familyParents</button>
+        </div>
+
+        <div class="flex-btn-group">
+          <button type="button" onclick="getDatas('families/1/familyChildren')">families/1/familyChildren</button>
+          <button type="button" onclick="getDatas('families/2/familyChildren')">families/2/familyChildren</button>
+          <button type="button" onclick="getDatas('families/3/familyChildren')">families/3/familyChildren</button>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 18px;">
+        <p style="margin-bottom: 4px;">子資源結合父資源。</p>
+        <div class="flex-btn-group">
+          <button type="button" onclick="getDatas('comments/1/posts')">comments/1/posts</button>
+          <button type="button" onclick="getDatas('comments/2/posts')">comments/2/posts</button>
+          <button type="button" onclick="getDatas('comments/3/posts')">comments/3/posts</button>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <br>
+
+
+  <!-- 使用 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <script src="./jsonServerTest.js"></script>
+</body>
+
+</html>

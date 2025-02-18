@@ -1,11 +1,243 @@
-{ "users": [
-
-  ],
+{
+  "users": [],
   "posts": [
-    { "id": 1, "title": "json-server0915", "author": "typicode" }
+    {
+      "title": "json-server-aaa",
+      "author": "typicode",
+      "date": "2025/02/03",
+      "id": 1
+    },
+    {
+      "title": "json-server-bbb",
+      "date": "2024/12/21",
+      "id": 2
+    },
+    {
+      "title": "json-server-ccc",
+      "author": "patchAuthor2",
+      "date": "2025/01/10",
+      "id": 3
+    },
+    {
+      "title": "json-server-eee",
+      "author": "patchAuthor2",
+      "date": "2025/01/10",
+      "id": 4
+    },
+    {
+      "title": "json-server-ddd",
+      "author": "patchAuthor2",
+      "date": "2025/01/10",
+      "id": 5
+    },
+    {
+      "title": "json-server-1739440159653",
+      "author": "typicode",
+      "id": 6
+    },
+    {
+      "title": "json-server-1739440165686",
+      "author": "typicode",
+      "id": 7
+    },
+    {
+      "title": "json-server-1739440166824",
+      "author": "typicode",
+      "date": "2025/11/05",
+      "id": 8
+    },
+    {
+      "title": "json-server-1739440167654",
+      "author": "typicode",
+      "id": 9
+    },
+    {
+      "title": "patchAuthor2",
+      "author": "typicode",
+      "id": 10
+    },
+    {
+      "title": "json-server-1739440169440",
+      "author": "typicode",
+      "id": 11
+    },
+    {
+      "title": "json-server-1739440172794",
+      "author": "",
+      "id": 12
+    }
   ],
   "comments": [
-    { "id": 1, "body": "some comment", "postId": 1 }
+    {
+      "id": 1,
+      "body": "post 1 comment aaa",
+      "postId": 1
+    },
+    {
+      "id": 2,
+      "body": "post 1 comment bbb",
+      "postId": 1
+    },
+    {
+      "id": 3,
+      "body": "post 3 comment",
+      "postId": 3
+    },
+    {
+      "id": 4,
+      "body": "post 4 comment",
+      "postId": 4
+    }
   ],
-  "profile": { "name": "typicode" }
+  "families": [
+    {
+      "id": 1,
+      "name": "林家",
+      "location": {
+        "city": "台北市"
+      }
+    },
+    {
+      "id": 2,
+      "name": "陳家",
+      "location": {
+        "city": "台南市"
+      }
+    },
+    {
+      "id": 3,
+      "name": "張家",
+      "location": {
+        "city": "台中市"
+      }
+    }
+  ],
+  "familyParents": [
+    {
+      "id": 1,
+      "familyId": 1,
+      "role": "父",
+      "name": "林阿弟",
+      "age": 78,
+      "lifeDeathCodeId": 1
+    },
+    {
+      "id": 2,
+      "familyId": 1,
+      "role": "母",
+      "name": "張小英",
+      "age": 70,
+      "lifeDeathCodeId": 1
+    },
+    {
+      "id": 3,
+      "familyId": 2,
+      "role": "父",
+      "name": "陳大生",
+      "age": 69,
+      "lifeDeathCodeId": 2
+    },
+    {
+      "id": 4,
+      "familyId": 2,
+      "role": "母",
+      "name": "魏芸",
+      "age": 65,
+      "lifeDeathCodeId": 1
+    },
+    {
+      "id": 5,
+      "familyId": 3,
+      "role": "母",
+      "name": "劉阿美",
+      "age": 77,
+      "lifeDeathCodeId": 2
+    }
+  ],
+  "familyChildren": [
+    {
+      "id": 1,
+      "familyId": 1,
+      "name": "林大姊",
+      "age": 45,
+      "lifeDeathCodeId": 1
+    },
+    {
+      "id": 2,
+      "familyId": 1,
+      "name": "林二弟",
+      "age": 43,
+      "lifeDeathCodeId": 2
+    },
+    {
+      "id": 3,
+      "familyId": 2,
+      "name": "陳定南",
+      "age": 32,
+      "lifeDeathCodeId": 1
+    }
+  ],
+  "peoples": [
+    {
+      "id": 1,
+      "familyParentId": "",
+      "familyChildId": 1,
+      "lifeDeathCodeId": 1
+    },
+    {
+      "id": 2,
+      "familyParentId": "",
+      "familyChildId": 2,
+      "lifeDeathCodeId": 1
+    },
+    {
+      "id": 3,
+      "familyParentId": "",
+      "familyChildId": 3,
+      "lifeDeathCodeId": 2
+    },
+    {
+      "id": 4,
+      "familyParentId": 1,
+      "familyChildId": "",
+      "lifeDeathCodeId": 1
+    },
+    {
+      "id": 5,
+      "familyParentId": 2,
+      "familyChildId": "",
+      "lifeDeathCodeId": 1
+    },
+    {
+      "id": 6,
+      "familyParentId": 3,
+      "familyChildId": "",
+      "lifeDeathCodeId": 2
+    },
+    {
+      "id": 7,
+      "familyParentId": 4,
+      "familyChildId": "",
+      "lifeDeathCodeId": 1
+    },
+    {
+      "id": 8,
+      "familyParentId": 5,
+      "familyChildId": "",
+      "lifeDeathCodeId": 2
+    }
+  ],
+  "lifeDeathCodes": [
+    {
+      "id": 1,
+      "status": "life"
+    },
+    {
+      "id": 2,
+      "status": "death"
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
 }
