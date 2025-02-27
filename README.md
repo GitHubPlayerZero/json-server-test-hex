@@ -11,6 +11,7 @@
 下載此專案後，上傳到自己的 GitHub，再於 [Render](https://render.com/) 中部署專案即可使用。
 
 <br>
+---
 
 ## 本機運行
 下載後若想運行於本機，請先安裝套件：
@@ -36,7 +37,7 @@ npm i
 ### JSON Server URL
 http://localhost:3000/
 
-<br>
+---
 
 ## 範例說明
 sample 資料夾中提供測試的寫法範例（本機測試），可以拷貝至另外的專案進行測試，**測試時請打開 console 觀看訊息**。<br>
