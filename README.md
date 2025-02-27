@@ -22,7 +22,7 @@ npm i
 
 ### 腳本說明
 - `npm run start`<br>
-  啟動 Node Server 作為 JSON Server 服務，異動資料時**不會**實際寫入 db.json 中，**具有身份驗證功能**。<br>
+  啟動 Node Server 作為 JSON Server 服務，異動資料時**不會**實際寫入 db.json，**具有身份驗證功能**。<br>
   **註：** 部署於 Render 的運行方式屬於此種，因此資料不會實際寫入 db.json，只會暫存於 Render 中，當有休眠或重啟伺服器時即會釋放。
   
 - `npm run watch`<br>
