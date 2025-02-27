@@ -43,6 +43,11 @@ sample 資料夾中提供測試的寫法範例（本機測試），可以拷貝�
 若想與 json-server 同一個專案測試，請以 `npm run start` 啟動 json-server，這樣才不會因為實際異動到 db.json 而使專案自動重整，造成無法觀看 console 訊息。<br>
 😉 但建議最好的方式還是拷貝到另外的專案執行，這樣比較好實際觀察 db.json 的異動情形。<br>
 
-兩隻測試：
+測試程式：
 - **jsonServerTest.html：** 測試 json-server 各種寫法。
 - **jsonServerAuthTest.html：** 測試 json-server-auth 身份驗證。
+
+---
+
+## 其它
+- db.json.original 為原本的測試檔案，內容較乾淨。
