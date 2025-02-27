@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "watch": "json-server --watch db.json"
+    "watch": "json-server --watch db.json",
+    "auth": "json-server db.json -m ./node_modules/json-server-auth"
   },
   "dependencies": {
     "cors": "^2.8.5",

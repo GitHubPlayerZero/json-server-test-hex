@@ -1,5 +1,19 @@
 {
-  "users": [],
+  "users": [
+    {
+      "email": "test@test.com",
+      "password": "$2a$10$snfFfh5aTGqdNropnWjfNe6THRQgFh5wYbbAPjEYYpXLi8WbYdST6",
+      "name": "測試帳號",
+      "id": 1
+    }
+  ],
+  "userPosts": [
+    {
+      "content": "測試貼文",
+      "userId": 1,
+      "id": 1
+    }
+  ],
   "posts": [
     {
       "title": "json-server-aaa",
@@ -177,56 +191,7 @@
       "lifeDeathCodeId": 1
     }
   ],
-  "peoples": [
-    {
-      "id": 1,
-      "familyParentId": "",
-      "familyChildId": 1,
-      "lifeDeathCodeId": 1
-    },
-    {
-      "id": 2,
-      "familyParentId": "",
-      "familyChildId": 2,
-      "lifeDeathCodeId": 1
-    },
-    {
-      "id": 3,
-      "familyParentId": "",
-      "familyChildId": 3,
-      "lifeDeathCodeId": 2
-    },
-    {
-      "id": 4,
-      "familyParentId": 1,
-      "familyChildId": "",
-      "lifeDeathCodeId": 1
-    },
-    {
-      "id": 5,
-      "familyParentId": 2,
-      "familyChildId": "",
-      "lifeDeathCodeId": 1
-    },
-    {
-      "id": 6,
-      "familyParentId": 3,
-      "familyChildId": "",
-      "lifeDeathCodeId": 2
-    },
-    {
-      "id": 7,
-      "familyParentId": 4,
-      "familyChildId": "",
-      "lifeDeathCodeId": 1
-    },
-    {
-      "id": 8,
-      "familyParentId": 5,
-      "familyChildId": "",
-      "lifeDeathCodeId": 2
-    }
-  ],
+  "peoples": [],
   "lifeDeathCodes": [
     {
       "id": 1,

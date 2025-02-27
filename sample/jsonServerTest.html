@@ -5,60 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JSON Server Test</title>
-  <!-- <link rel="stylesheet" href="../../css/common.css"> -->
-
-  <style>
-    body {
-      padding: 15px 15px 50px;
-      background-color: #eee;
-      font-size: 18px;
-    }
-
-    hr {
-      margin: 30px 0;
-    }
-
-    input,
-    button,
-    select {
-      font-size: 16px;
-    }
-
-    input[type=button],
-    input[type=submit],
-    button {
-      padding: 4px 12px;
-      box-shadow: 3px 3px 3px #666;
-    }
-
-    .flex-btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      -moz-column-gap: 16px;
-      column-gap: 16px;
-      row-gap: 20px;
-      padding: 10px 10px 15px;
-    }
-
-    .flex-btn-group.column {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .flex-btn-group.border {
-      border: 2px dotted #990;
-    }
-
-    .border {
-      border: 3px dashed orange;
-      padding: 0 15px 10px;
-    }
-
-    .border-sub {
-      border: 2px dashed blue;
-      padding: 0 15px 10px;
-    }
-  </style>
+  <link rel="stylesheet" href="./common.css">
 </head>
 
 <body>
@@ -115,6 +62,7 @@
   <section class="border">
     <h3>取得資源所有資料</h3>
     <div class="flex-btn-group">
+      <!-- <button type="button" onclick="getDatas('users')">users</button> -->
       <button type="button" onclick="getDatas('posts')">posts</button>
       <button type="button" onclick="getDatas('comments')">comments</button>
       <button type="button" onclick="getDatas('profile')">profile</button>
@@ -158,7 +106,7 @@
     </div>
 
     <div style="margin-bottom: 18px;">
-      <p style="margin-bottom: 4px;">當不給予屬性條件值時，會取得屬性內容為「<span style="font-weight: bold;">空字串</span>」的資料。</p>
+      <p style="margin-bottom: 4px;">當不給予屬性條件值時，會取得屬性內容為「<span class="bold">空字串</span>」的資料。</p>
       <div class="flex-btn-group">
         <button type="button" onclick="getDatas('posts?author=')">posts?author=</button>
       </div>
@@ -207,8 +155,8 @@
 
     <div style="margin-bottom: 18px;">
       <p style="margin-bottom: 4px;">
-        當 <code>_like</code> 不下條件值時，可以取得屬性內容為任何值的資料（<span style="font-weight: bold;">包括空字串</span>），但不會取得<span
-          style="font-weight: bold;">未定義此屬性</span>的資料。<br>
+        當 <code>_like</code> 不下條件值時，可以取得屬性內容為任何值的資料（<span class="bold">包括空字串</span>），但不會取得<span
+          class="bold">未定義此屬性</span>的資料。<br>
       </p>
 
       <div class="flex-btn-group">
@@ -219,7 +167,7 @@
     <div style="margin-bottom: 18px;">
       <p style="margin-bottom: 4px;">
         <code>_ne</code>，相當於 SQL 的 <code>&lt;></code>（不等於），大小寫敏感。<br>
-        要注意的是，若資料<span style="font-weight: bold;">未定義條件所指定的屬性</span>，也會被排除。
+        要注意的是，若資料<span class="bold">未定義條件所指定的屬性</span>，也會被排除。
       </p>
 
       <div class="flex-btn-group">
@@ -231,8 +179,8 @@
 
     <div style="margin-bottom: 18px;">
       <p style="margin-bottom: 4px;">
-        當 <code>_ne</code> 不下條件值時，會取得所有資料，但會排除屬性內容為「<span style="font-weight: bold;">空字串</span>」與「<span
-          style="font-weight: bold;">未定義此屬性</span>」的資料。
+        當 <code>_ne</code> 不下條件值時，會取得所有資料，但會排除屬性內容為「<span class="bold">空字串</span>」與「<span
+          class="bold">未定義此屬性</span>」的資料。
       </p>
 
       <div class="flex-btn-group">
@@ -260,7 +208,7 @@
   <section class="border">
     <h3>排序</h3>
     <p>
-      <span style="font-weight: bold;">注意！</span>
+      <span class="bold">注意！</span>
       以日期字串做排序時要注意，其會以字串的方式比對而非日期，因此 <code>1</code> 會被視為比 <code>02</code>
       來得大，而 <code>2</code> 又會被視為比 <code>11</code> 大。<br>
       因此若有儲存日期資料，內容格式最好統一補 0，例如 <code>2025/2/1</code> 要寫作 <code>2025/02/01</code>。
@@ -395,7 +343,7 @@
     <div style="margin-bottom: 18px;">
       <p style="margin-bottom: 4px;">
         測試 <code>_end</code> 與 <code>_limit</code> 合用。<br>
-        結果：無論參數如何排列、無論參數值的大小，都會<span style="font-weight: bold;">以 <code>_end</code> 的設定為主</span>。
+        結果：無論參數如何排列、無論參數值的大小，都會<span class="bold">以 <code>_end</code> 的設定為主</span>。
       </p>
 
       <div class="flex-btn-group">
@@ -454,7 +402,7 @@
   <!-- Relationships -->
   <article class="border">
     <h3>Relationships</h3>
-    <p>類似於 SQL 的 JOIN，<span style="font-weight: bold;">關聯的 ID 會放在子資源中</span>。</p>
+    <p>類似於 SQL 的 JOIN，<span class="bold">關聯的 ID 會放在子資源中</span>。</p>
 
     <section class="border-sub" style="margin-bottom: 28px;">
       <h4>_embed：父資源結合子資源，類似於 SQL 的一對多 outer join 關係。</h4>
@@ -562,22 +510,14 @@
             peoples?_expand=familyChild&_expand=familyParent&_expand=lifeDeathCode
           </button>
         </div>
-
-        <p style="margin-bottom: 4px;">_expand 與 _embed 合用</p>
-
-        <div class="flex-btn-group">
-          <button type="button" onclick="getDatas('familyChildren?_expand=family&_embed=peoples')">
-            familyChildren?_expand=family&_embed=peoples
-          </button>
-        </div>
       </div>
     </section>
 
-    <section class="border-sub">
+    <section class="border-sub" style="margin-bottom: 28px;">
       <h4>嵌套資源</h4>
       <ul style="margin-bottom: 24px;">
         <li>
-          此作法似乎僅適用於<span style="font-weight: bold;">父資源關聯子資源</span>，子資源關聯父資源只會撈回父資源所有資料，沒有篩選效果。
+          此作法似乎僅適用於<span class="bold">父資源關聯子資源</span>，子資源關聯父資源只會撈回父資源所有資料，沒有篩選效果。
         </li>
         <li>父資源無法整個資源做關聯，必須指定某一筆 ID。</li>
         <li>回傳結果只會放子資源的資料。</li>
@@ -613,14 +553,47 @@
           <button type="button" onclick="getDatas('comments/3/posts')">comments/3/posts</button>
         </div>
       </div>
+
+      <div style="margin-bottom: 18px;">
+        <p style="margin-bottom: 4px;">
+          嵌套資源也可應用於 POST 寫入資料，但<span class="bold">不建議這麼做</span>，因為<span class="bold">它會將關聯 ID
+            存成字串型態，會造成此筆資料無法對應到關聯</span>。<br>
+          另外，其它如 PUT、PATCH、DELETE 都不支援，會發生 404 錯誤。
+        </p>
+        <div class="flex-btn-group">
+          <button type="button" onclick="addPostComment(1, '用嵌套路徑新增 comment')">POST posts/1/comments</button>
+          <button type="button" onclick="modifyPostComment(1, '用嵌套路徑修改 comment')">PUT posts/1/comments</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="border-sub">
+      <h4>綜合使用</h4>
+
+      <div style="margin-bottom: 18px;">
+        <p style="margin-bottom: 4px;"><code>_expand</code> 與 <code>_embed</code> 合用。</p>
+
+        <div class="flex-btn-group">
+          <button type="button" onclick="getDatas('familyChildren?_expand=family&_embed=peoples')">
+            familyChildren?_expand=family&_embed=peoples
+          </button>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 18px;">
+        <p style="margin-bottom: 4px;">嵌套資源與 <code>_expand</code>、<code>_embed</code> 合用。</p>
+        <div class="flex-btn-group">
+          <button type="button"
+            onclick="getDatas('families/1/familyParents?_embed=peoples&_expand=lifeDeathCode')">families/1/familyParents?_embed=peoples&_expand=lifeDeathCode</button>
+        </div>
+      </div>
     </section>
   </article>
-
-  <br>
 
 
   <!-- 使用 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <script src="./common.js"></script>
   <script src="./jsonServerTest.js"></script>
 </body>
 

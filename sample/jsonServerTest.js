@@ -1,23 +1,5 @@
-// const url = "https://json-server-test-hex.onrender.com/";
-const url = "http://localhost:3000/";
-
 const getTitle = () => `json-server-${new Date().getTime()}`;
 const getAuthor = () => "typicode";
-
-const finalProcesser = () => {
-  console.log(``);
-};
-
-const checkId = (idName) => {
-  const id = document.querySelector(`#${idName}`).value;
-  console.log(idName);
-  if (!idName) {
-    alert("必須輸入 ID！");
-    return undefined;
-  }
-  return id;
-}
-
 
 /* 新增各資源資料 */
 function addData (table, dataObj) {
@@ -43,6 +25,11 @@ function addPost () {
     title: getTitle(),
     author: getAuthor()
   });
+}
+
+// 新增與 post 對應的 comment
+function addPostComment (id, body) {
+  addData(`posts/${id}/comments`, { body });
 }
 
 
@@ -85,6 +72,12 @@ function putPost1All () {
     author: getAuthor()
   });
 }
+
+// 修改與 post 對應的 comment
+function modifyPostComment (id, body) {
+  modifyAllData(`posts/${id}/comments`, { body });
+}
+
 
 /* 修改各資源部份資料 */
 function modifySomeData (table, dataObj) {

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Server Auth Test</title>
+  <link rel="stylesheet" href="./common.css">
+</head>
+
+<body>
+  <h1>JSON Server Auth Test</h1>
+  <hr />
+
+  <h2>使用者相關操作</h2>
+
+  <div style="margin-bottom: 32px;">
+    <p>
+      預設會以 <code>db.json</code> 中的 <code>users</code> 資源作為<span class="bold">使用者</span>資料集資源。
+    </p>
+
+    <ul>
+      <li style="margin-bottom: 8px;">
+        <span class="bold">Email（<code>email</code>）</span>、<span
+          class="bold">密碼（<code>password</code>）</span>為必填，且看起來會以 Email 作為帳號識別（不允許重複，雖然實際存取 json-server 時仍是以 ID
+        為鍵值）。
+      </li>
+      <li style="margin-bottom: 8px;">
+        除了 Email 及密碼之外，也可以添加其它資料，例如姓名、生日、角色等等，傳送過去的所有資料都會存進資源。
+      </li>
+      <li style="margin-bottom: 8px;">
+        存入的密碼會是加密過的。
+      </li>
+    </ul>
+  </div>
+
+  <p class="bold">註：請點擊右下方的「顯示／隱藏輸入區」按鈕以開啟測試資料的輸入視窗。</p>
+
+  <!-- 註冊 -->
+  <section class="border" style="margin-bottom: 24px;">
+    <h3 style="margin-bottom: 8px;">註冊</h3>
+    <div class="flex-btn-group">
+      <button type="button" onclick="addUser('users')">users</button>
+      <button type="button" onclick="addUser('register')">register</button>
+      <button type="button" onclick="addUser('signup')">signup</button>
+    </div>
+    <p id="msg" style="border: 2px dashed green; padding: 10px; overflow: auto;"></p>
+  </section>
+
+  <!-- 使用 ID -->
+  <div class="border" style="padding-top: 20px; margin-bottom: 24px;">
+    <!-- 修改 -->
+    <h3 style="margin-bottom: 8px;">修改</h3>
+    <p style="margin-bottom: 8px; margin-top: 8px;">
+      注意 <code>put</code> 的特性是<span class="bold">修改「整個資料」</span> （<code>patch</code> 是部份資料），因此也需要給入完整的資料，包含 Email
+      和密碼，否則會拋錯。
+    </p>
+    <div class="flex-btn-group">
+      <button type="button" onclick="patchUserName('users')">以 patch 修改姓名</button>
+      <button type="button" onclick="patchUserEmail('users')">以 patch 修改 Email</button>
+      <button type="button" onclick="patchUserPassword('users')">以 patch 修改密碼</button>
+      <button type="button" onclick="putUserName('users')">以 put 修改姓名 (會拋錯)</button>
+      <button type="button" onclick="putUser('users')">以 put 修改全部</button>
+    </div>
+
+    <!-- 刪除 -->
+    <h3 style="margin-bottom: 8px;">刪除</h3>
+    <div class="flex-btn-group">
+      <button type="button" onclick="deleteUser('users')">刪除使用者</button>
+    </div>
+
+    <!-- 查詢 -->
+    <h3 style="margin-bottom: 8px;">查詢</h3>
+    <div class="flex-btn-group">
+      <button type="button" onclick="getUsers('users')">取得所有使用者資料</button>
+      <button type="button" onclick="getUserById('users');">ID 取得使用者</button>
+    </div>
+  </div>
+
+  <!-- 登入 -->
+  <div class="border" style="margin-bottom: 24px;">
+    <h3 style="margin-bottom: 8px;">登入</h3>
+    <div class="flex-btn-group">
+      <button type="button" onclick="login();">login</button>
+      <button type="button" onclick="signin();">signin</button>
+    </div>
+
+    <h3 style="margin-bottom: 8px;">登出</h3>
+    <p style="margin-bottom: 8px; margin-top: 0;">json-server-auth 沒有提供登出功能，因此這邊的登出僅是將 user 資料清空。</p>
+    <div class="flex-btn-group">
+      <button type="button" onclick="logout();">登出</button>
+    </div>
+  </div>
+
+  <hr />
+
+  <h2>守衛路由</h2>
+  <p style="margin-bottom: 28px;">
+    以上對於使用者的操作都沒有權限的控管，也就是想改哪筆就能改哪筆。<br>
+    但在路徑加上路由代碼，就可以有控制權限的效果。
+  </p>
+
+  <!-- 基礎使用介紹 -->
+  <div class="border" style="margin-bottom: 16px;">
+    <h3>基礎使用介紹</h3>
+
+    <p style="margin-bottom: 8px;">例如查詢某個 ID 的使用者：</p>
+    <ul style="margin-bottom: 12px; margin-top: 0;">
+      <li>664 權限：讀取時可以不需要 token（任何人都可以讀取）。</li>
+      <li>660 權限：讀取時需要 token（需要先登入才能讀取）。</li>
+      <li>600 權限：讀取時需要<span class="bold">本人</span>的 token（只有本人能讀取）。</li>
+    </ul>
+
+    <div class="flex-btn-group">
+      <button type="button" onclick="getAuthUserById('664/users')">ID 取得使用者 (664)</button>
+      <button type="button" onclick="getAuthUserById('660/users')">ID 取得使用者 (660)</button>
+      <button type="button" onclick="getAuthUserById('600/users')">ID 取得使用者 (600)</button>
+    </div>
+
+    <p style="margin-bottom: 8px;">
+      不過，對於查詢 users 所有資料會無法使用「僅限本人」的驗證（600），推測是因為沒有關聯 ID 的關係。<br>
+      可以參考後面「與使用者關聯的資料」的測試。
+    </p>
+    <div class="flex-btn-group">
+      <button type="button" onclick="queryByAuth('664/users')">取得所有使用者 (664)</button>
+      <button type="button" onclick="queryByAuth('660/users')">取得所有使用者 (660)</button>
+      <button type="button" onclick="queryByAuth('600/users')">取得所有使用者 (600)</button>
+    </div>
+
+    <p style="margin-bottom: 8px;">寫入測試：</p>
+    <ul style="margin-bottom: 12px; margin-top: 0;">
+      <li>444 權限：不能寫入。</li>
+      <li>660 權限：有 token 皆可寫入（需要先登入才能寫入）。</li>
+      <li>600 權限：寫入時需要<span class="bold">本人</span>的 token（只有本人能寫入）。</li>
+    </ul>
+    <div class="flex-btn-group">
+      <button type="button" onclick="patchUserNameByAuth('444/users')">以 patch 修改姓名 (444)</button>
+      <button type="button" onclick="patchUserNameByAuth('660/users')">以 patch 修改姓名 (660)</button>
+      <button type="button" onclick="patchUserNameByAuth('600/users')">以 patch 修改姓名 (600)</button>
+      <button type="button" onclick="putUserByAuth('600/users')">以 put 修改全部 (600)</button>
+      <button type="button" onclick="deleteDataByAuth('444/users')">刪除使用者 (444)</button>
+      <button type="button" onclick="deleteDataByAuth('600/users')">刪除使用者 (600)</button>
+    </div>
+  </div>
+  <!-- 基礎使用介紹 end -->
+
+  <!-- 與使用者關聯的資料 -->
+  <div class="border" style="margin-bottom: 52px;">
+    <h3>與使用者關聯的資料</h3>
+    <p>
+      在新增資料時，可以寫入 <code>"userId"</code> 以與使用者做關聯，之後此資源也可以有權限控管的效果。
+    </p>
+
+    <label class="form-grid border" style="padding-top: 10px; margin-bottom: 28px;">
+      userPosts content：&nbsp;
+      <input type="text" id="userPostContent" value="test">
+    </label>
+
+    <p style="margin-bottom: 8px;">
+      664：只要有 token 就可以寫入，此時資料沒有設定 <code>userId</code> 也可以寫入。
+    </p>
+    <div class="flex-btn-group">
+      <button type="button" onclick="addUserPostByAuthNoId('664/userPosts')">
+        POST 664/userPosts（沒有 userId）
+      </button>
+    </div>
+
+    <p style="margin-bottom: 8px;">
+      600：只有本人才可以寫入，此時資料若沒有 <code>userId</code> 會出錯。
+    </p>
+    <div class="flex-btn-group">
+      <button type="button" onclick="addUserPostByAuthNoId('600/userPosts')">POST 600/userPosts（沒有 userId）</button>
+      <button type="button" onclick="addUserPostByAuth('600/userPosts')">POST 600/userPosts</button>
+    </div>
+
+    <p style="margin-bottom: 8px;">
+      給入 <code>userId</code> 的另一種寫法——使用嵌套路徑。
+    </p>
+    <p style="color: red; font-weight: bold; margin-bottom: 8px; margin-top: 0;">
+      注意！雖然這種方式會自動將 <code>userId</code> 寫入資料中，但其內容型態卻會是字串，這會造成資源之間關聯的問題，因此不建議使用此種寫法。
+    </p>
+    <div class="flex-btn-group">
+      <button type="button" onclick="addUserPostByAuth2('600', 'userPosts')">
+        POST 600/userPosts (嵌套路徑寫法)
+      </button>
+    </div>
+
+    <p style="margin-bottom: 8px;">
+      修改資料。
+    </p>
+    <div class="flex-btn-group">
+      <button type="button" onclick="patchUserPostByAuth('444/userPosts')">PATCH 444/userPosts</button>
+      <button type="button" onclick="patchUserPostByAuth('664/userPosts')">PATCH 664/userPosts</button>
+      <button type="button" onclick="patchUserPostByAuth('600/userPosts')">PATCH 600/userPosts</button>
+    </div>
+
+    <p style="margin-bottom: 8px;">
+      刪除資料。
+    </p>
+    <div class="flex-btn-group">
+      <button type="button" onclick="deleteDataByAuth('444/userPosts')">DELETE 444/userPosts</button>
+      <button type="button" onclick="deleteDataByAuth('664/userPosts')">DELETE 664/userPosts</button>
+      <button type="button" onclick="deleteDataByAuth('600/userPosts')">DELETE 600/userPosts</button>
+    </div>
+
+    <p style="margin-bottom: 8px;">
+      有別於之前測試的「取得所有使用者」，對於 userPosts 來說，由於有和使用者關聯的 ID（<code>userId</code>），因此 600 權限可以運作，但不管是使用哪個使用者登入，都只會取得全部的資料。
+    </p>
+    <div class="flex-btn-group">
+      <button type="button" onclick="queryByAuth('664/userPosts')">取得所有 userPosts (664)</button>
+      <button type="button" onclick="queryByAuth('600/userPosts')">取得所有 userPosts (600)</button>
+      <button type="button" onclick="getAuthUserById('600/userPosts')">ID 取得 userPosts (600)</button>
+    </div>
+  </div>
+  <!-- 與使用者關聯的資料 end -->
+
+  <!-- 底部固定資訊 -->
+  <section style="position: fixed; bottom: 10px; right: 20px; font-size: 16px;">
+
+    <!-- 輸入視窗 -->
+    <div class="border d-none" id="testDataArea" style="margin-bottom: 4px; background-color: #ffffaa;">
+
+      <!-- 按鈕 -->
+      <div class="flex-btn-group" style="justify-content: space-between">
+        <button type="button" onclick="testDataArea.hideOrShowContent();">隱藏／顯示內容</button>
+        <button type="button" onclick="logout();">登出</button>
+        <button type="button" onclick="login();">登入</button>
+      </div>
+
+      <!-- 輸入內容區塊 -->
+      <div id="inputContent" style="margin-top: 8px;">
+        <!-- 使用者資料 -->
+        <form action="javascript:void(0)" id="formUser">
+          <label class="form-grid">
+            <span class="form-required">*&nbsp;</span>Email：&nbsp;
+            <input type="text" value="aaa@bbb.com" id="userEmail" style="width: 250px;">
+          </label>
+          <label class="form-grid">
+            <span class="form-required">*&nbsp;</span>密碼：&nbsp;
+            <input type="text" value="12345" id="userPassword" style="width: 100px;">
+          </label>
+          <label class="form-grid">
+            姓名：&nbsp;
+            <input type="text" value="小明" id="userName" style="width: 150px;">
+          </label>
+        </form>
+        <!-- 使用者資料 end -->
+
+        <hr style="margin-top: 20px; margin-bottom: 20px;" />
+
+        <!-- ID 資料 -->
+        <label>
+          ID：&nbsp;
+          <input type="number" min="1" id="userId" value="1" style="width: 50px;">
+        </label>
+        &nbsp;&nbsp;（用來測試需要 ID 的功能）
+        <!-- ID 資料 end -->
+
+      </div>
+      <!-- 輸入內容區塊 end -->
+
+    </div>
+    <!-- 輸入視窗 end -->
+
+    <!-- 登入資訊 -->
+    <div style="padding: 5px 10px; background-color: #dda; opacity: 0.9; width: fit-content; margin-left: auto;">
+      您好，<span id="userMsg">請先登入</span>！&nbsp;&nbsp;
+      <button type="button" onclick="testDataArea.showOrHideTestDataArea();">顯示／隱藏輸入區</button>
+    </div>
+
+  </section>
+  <!-- 底部固定資訊 end -->
+
+
+  <!-- 使用 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <script src="./common.js"></script>
+  <script src="./jsonServerAuthTest.js"></script>
+</body>
+
+</html>
