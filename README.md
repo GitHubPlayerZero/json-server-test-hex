@@ -26,10 +26,10 @@ npm i
   **註：** 部署於 Render 的運行方式屬於此種，因此資料不會實際寫入 db.json，只會暫存於 Render 中，當有休眠或重啟伺服器時即會釋放。
   
 - `npm run watch`<br>
-  直接啟動 JSON Server 服務，**本機**須安裝 json-server 套件於**全域**，資料**會**實際寫入 db.json 中，本身**不**具有身份驗證功能。
+  直接啟動 JSON Server 服務，**本機**須安裝 json-server 套件於**全域**，資料**會**實際寫入 db.json，本身**不**具有身份驗證功能。
   
 - `npm run auth`<br>
-  啟動 JSON Server Auth 服務（本身亦為 JSON Server 服務），須於此**專案中**安裝 json-server、json-server-auth 套件，資料**會**實際寫入 db.json 中，**具有身份驗證功能**。
+  啟動 JSON Server Auth 服務（本身亦為 JSON Server 服務），須於**此專案中**安裝 json-server、json-server-auth 套件，資料**會**實際寫入 db.json，**具有身份驗證功能**。
 
 <br>
 
