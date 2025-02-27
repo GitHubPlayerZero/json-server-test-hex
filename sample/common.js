@@ -1,4 +1,3 @@
-// const url = "https://json-server-test-hex.onrender.com/";
 const url = "http://localhost:3000/";
 
 const finalProcesser = () => {
