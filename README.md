@@ -34,10 +34,10 @@ http://localhost:3000/
 <br>
 
 ## 範例說明
-sample 資料夾中提供測試的寫法範例，可以拷貝至另外的專案進行測試，測試時請打開 console 觀看訊息。<br>
+sample 資料夾中提供測試的寫法範例，可以拷貝至另外的專案進行測試，**測試時請打開 console 觀看訊息**。<br>
 若想與 json-server 同一個專案測試，請以 `npm run start` 啟動 json-server，這樣才不會因為實際異動到 db.json 而使專案自動重整，造成無法觀看 console 訊息。<br>
 但建議最好的方式還是拷貝到另外的專案執行，這樣比較好實際觀察 db.json 的異動情形。<br>
 
 兩隻測試：
-- **jsonServerTest.html：**json-server 各種寫法測試。
-- **jsonServerAuthTest.html：**json-server-auth 身份驗證測試。
+- **jsonServerTest.html：** json-server 各種寫法測試。
+- **jsonServerAuthTest.html：** json-server-auth 身份驗證測試。
